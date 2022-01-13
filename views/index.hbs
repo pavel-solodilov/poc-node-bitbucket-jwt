@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <button onclick="fetchRepoDetailsViaJwt()">Try JWT</button>
+        <button onclick="fetchRepoDetailsViaToken()">Try token</button>
+    </body>
+
+    <script src="http://localhost:8080/js/index.umd.js"></script>
+    <script>
+        const appKey = '{{appKey}}';
+        const appClientKey = '{{appClientKey}}';
+        const appSharedSecret = '{{appSharedSecret}}';
+
+        const workspace = '{{workspace}}';
+        const repo = '{{repo}}';
+
+        // Breaks the actual code.
+        function fetchRepoDetailsViaJwt () {
+            const bitbucket = new Bitbucket.Bitbucket({
+                hideNotice: true,
+                auth: {
+                  type: 'jwt',
+                  appClientKey,
+                  appKey,
+                  appSharedSecret,
+                },
+            });
+
+            bitbucket.repositories.get({
+                workspace,
+                repo_slug: repo,
+            }).then(alert).catch(alert)
+        }
+
+        // Should work if you put a correct token in, but doesn't break the actual code.
+        function fetchRepoDetailsViaToken () {
+            const bitbucket = new Bitbucket.Bitbucket({
+                hideNotice: true,
+                auth: {
+                    type: 'token',
+                    token: '<some-garbage>'
+                },
+            });
+
+            bitbucket.repositories.get({
+                workspace,
+                repo_slug: repo,
+            }).then(alert).catch(alert)
+        }
+    </script>
+</html>
